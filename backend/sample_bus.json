@@ -1,0 +1,207 @@
+{
+  "partnerId": "AB",
+  "operatorId": "125766",
+  "tripId": "4455294542",
+  "serviceName": "Bangalore - Ahmedabad",
+  "routeId": "141538",
+  "travelerAgentName": "Gujarat Travels",
+  "busTypeName": "Bharat Benz AC Sleeper",
+  "departureTime": "08:00",
+  "arrivalTime": "17:45",
+  "travelTime": "09h 45m ",
+  "sourceID": "7",
+  "destinationID": "695",
+  "fares": [
+    "1299"
+  ],
+  "availableSeats": "28",
+  "journeyDate": "11-08-2026",
+  "boardingTimes": [
+    {
+      "bdPointName": "Kalasipalayam, nr. Sri kate,maramma temple,opp.kanakapura bus stand gujarat travels",
+      "bdPointId": "195572",
+      "bdTime": "07:45",
+      "bdAddress": "Nr. Shri kate maramma temple",
+      "bdcontactNumber": ",Kalasipalyam Nr. Sri Kate,Maramma Temple,Opp.Kanakapura Bus Stand Gujarat Travels-080-42247171",
+      "bdLocation": "Kalasipalyam",
+      "bdHelplineNumb": ""
+    },
+    {
+      "bdPointName": "Majestic no 8-1 parkal mutt building opp majestic bus stand tank bund road",
+      "bdPointId": "124365",
+      "bdTime": "08:00",
+      "bdAddress": "Opp. Ksrtc",
+      "bdcontactNumber": "Majestic No 8-1 parkal mutt building opp majestic bus stand tank bund road-080-42247171",
+      "bdLocation": "Majestic",
+      "bdHelplineNumb": ""
+    },
+    {
+      "bdPointName": "Anand rao circle near suprabhat hotel",
+      "bdPointId": "124359",
+      "bdTime": "08:05",
+      "bdAddress": "JP cordial redBus lounge(boarding from suprabhat hotel Anand Rao circle",
+      "bdcontactNumber": "-080-42247171",
+      "bdLocation": "Anand Rao Circle",
+      "bdHelplineNumb": ""
+    },
+    {
+      "bdPointName": "Yeshwanthpur govardhan theatre nr.kokan express.restaurant",
+      "bdPointId": "124367",
+      "bdTime": "08:25",
+      "bdAddress": "Kokar exprss restaurant",
+      "bdcontactNumber": "Yeshwanthpur Govardhan theatre NR.Kokan express.restaurant-7229046014-19",
+      "bdLocation": "Yeswanthpur",
+      "bdHelplineNumb": ""
+    },
+    {
+      "bdPointName": "Gorgunteoalya near kia dental hospital",
+      "bdPointId": "124361",
+      "bdTime": "08:35",
+      "bdAddress": "Gorgunteoalya Near Kia Dental Hospital Gorgunteoalya Signal fly Over",
+      "bdcontactNumber": "-7229046014-19",
+      "bdLocation": "Goraguntepalya",
+      "bdHelplineNumb": ""
+    },
+    {
+      "bdPointName": "Jalahali toll plazza,parle-g factory",
+      "bdPointId": "124368",
+      "bdTime": "08:45",
+      "bdAddress": "Jalahalli fly over end",
+      "bdcontactNumber": "Jalahali Toll Plazza,Parle-G factory-7229046014-19",
+      "bdLocation": "Parle G Toll Plaza",
+      "bdHelplineNumb": ""
+    },
+    {
+      "bdPointName": "Nilmangla toll plaza",
+      "bdPointId": "395647",
+      "bdTime": "09:00",
+      "bdAddress": "NILMANGLA TOLL PLAZA",
+      "bdcontactNumber": "-7229046019",
+      "bdLocation": "Nelamangala Toll Plaza",
+      "bdHelplineNumb": ""
+    }
+  ],
+  "droppingTimes": [
+    {
+      "bdPointName": "Bypass (belgaum)",
+      "bdPointId": "204359",
+      "bdTime": "17:45",
+      "bdAddress": "",
+      "bdcontactNumber": "",
+      "bdLocation": "",
+      "bdHelplineNumb": "Belgaum By Pass"
+    }
+  ],
+  "cancellationPolicy": [
+    {
+      "time": "B/W 0-12.00 Hrs of Bus Boarding Time",
+      "refundPercent": "0",
+      "isCancellable": null,
+      "conditions": null,
+      "isPartialCancellable": null
+    },
+    {
+      "time": "B/W 12.00-24.00 Hrs of Bus Boarding Time",
+      "refundPercent": "50",
+      "isCancellable": null,
+      "conditions": null,
+      "isPartialCancellable": null
+    },
+    {
+      "time": "B/W 24.00-48.00 Hrs of Bus Boarding Time",
+      "refundPercent": "90",
+      "isCancellable": null,
+      "conditions": null,
+      "isPartialCancellable": null
+    },
+    {
+      "time": "B/W 48.00-744.00 Hrs of Bus Boarding Time",
+      "refundPercent": "90",
+      "isCancellable": null,
+      "conditions": null,
+      "isPartialCancellable": null
+    },
+    {
+      "time": "Above 744.00 Hrs of Bus Boarding Time",
+      "refundPercent": "90",
+      "isCancellable": null,
+      "conditions": null,
+      "isPartialCancellable": null
+    }
+  ],
+  "isRtc": "false",
+  "isRtcCollapse": "false",
+  "isSingleLadies": "0",
+  "layoutId": "0",
+  "safetyPlusEnabled": null,
+  "busImageURL": null,
+  "busImageCount": null,
+  "minFare": "1299",
+  "boardingStationFisrt": "Kalasipalayam, nr. Sri kate,maramma temple,opp.kanakapura bus stand gujarat travels",
+  "deboardingStationLast": "Bypass (belgaum)",
+  "deboardingDate": "Tue, 11/08/2026",
+  "boardingDate": "Tue, 11/08/2026",
+  "fareDetLst": null,
+  "seatData": null,
+  "amenityList": [
+    {
+      "amenityTitle": "Blanket",
+      "amenityIconUrl": "https://www.irctctourism.co.in/Bus/Amenities/blanket.png"
+    },
+    {
+      "amenityTitle": "Charging point",
+      "amenityIconUrl": "https://www.irctctourism.co.in/Bus/Amenities/ChargingPoint.png"
+    },
+    {
+      "amenityTitle": "Emergency Exit",
+      "amenityIconUrl": "https://www.irctctourism.co.in/Bus/Amenities/emergencyexit.png"
+    },
+    {
+      "amenityTitle": "Hammer",
+      "amenityIconUrl": "https://www.irctctourism.co.in/Bus/Amenities/Hammer.png"
+    },
+    {
+      "amenityTitle": "Fire Extinguisher",
+      "amenityIconUrl": "https://www.irctctourism.co.in/Bus/Amenities/FireExtinguisher.png"
+    },
+    {
+      "amenityTitle": "Reading light",
+      "amenityIconUrl": "https://www.irctctourism.co.in/Bus/Amenities/ReadingLight.png"
+    },
+    {
+      "amenityTitle": "GPS Tracking",
+      "amenityIconUrl": "https://www.irctctourism.co.in/Bus/Amenities/GPSTracking.png"
+    },
+    {
+      "amenityTitle": "First aid box",
+      "amenityIconUrl": "https://www.irctctourism.co.in/Bus/Amenities/FirstAid.png"
+    },
+    {
+      "amenityTitle": "Social Distancing",
+      "amenityIconUrl": "https://www.irctctourism.co.in/Bus/Amenities/SocialDistancing.png"
+    }
+  ],
+  "sourceCityName": "Bangalore",
+  "destCityName": "Belagavi",
+  "dojDateTime": "08/11/2026 08:00 AM",
+  "rating": null,
+  "total_rating_count": null,
+  "callFareBreakUpAPI": null,
+  "operator_discount": null,
+  "operator_rating": null,
+  "reviews": null,
+  "originStartTime": "2026-08-11 08:00:00",
+  "isSafety": null,
+  "tracking": null,
+  "serviceStartTime": null,
+  "uidNumber": null,
+  "availCatCard": null,
+  "availSrCitizen": null,
+  "availableSingleSeat": null,
+  "avlWindowSeats": null,
+  "fareAftDisc": "1187.9",
+  "bordDropFirst": false,
+  "ac": true,
+  "seater": false,
+  "sleeper": true
+}

@@ -1,0 +1,6 @@
+{
+  "name": "RouteStitch",
+  "description": "Next-generation travel routing engine featuring a boutique, editorial search interface and design system.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

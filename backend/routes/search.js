@@ -129,11 +129,21 @@ function validateSearchBody(body) {
  */
 router.get("/logs/:sessionId", (req, res) => {
   const { sessionId } = req.params;
+
+  // Disable Nagle's algorithm — sends TCP packets immediately without batching
+  req.socket.setNoDelay(true);
+
   res.writeHead(200, {
-    "Content-Type": "text/event-stream",
+    "Content-Type":  "text/event-stream",
     "Cache-Control": "no-cache",
-    "Connection": "keep-alive",
+    "Connection":    "keep-alive",
+    "X-Accel-Buffering": "no", // disable nginx proxy buffering if present
   });
+
+  // Flush headers immediately so the browser knows the stream is open
+  res.write(": connected\n\n");
+  if (typeof res.flush === "function") res.flush();
+
   logStreams.set(sessionId, res);
 
   req.on("close", () => {
@@ -176,6 +186,9 @@ router.post("/", async (req, res, next) => {
       const stream = logStreams.get(params.sessionId);
       if (stream) {
         stream.write(`data: ${JSON.stringify({ message: msg })}\n\n`);
+        // Flush immediately — without this, Node.js may batch packets and
+        // the browser won't see messages until the buffer fills
+        if (typeof stream.flush === "function") stream.flush();
       }
     }
   };
@@ -186,43 +199,22 @@ router.post("/", async (req, res, next) => {
   // Derive maxBufferMinutes, defaulting to 120 mins if not specified
   params.maxBufferMinutes = params.maxBufferMinutes != null ? params.maxBufferMinutes : 120;
 
-  // ── 2. Hard timeout wrapper ──────────────────────────────────────────────
-  let timeoutHandle;
-  const timeoutPromise = new Promise((_, reject) => {
-    timeoutHandle = setTimeout(() => {
-      reject(new Error("Search timeout — took more than 30 seconds"));
-    }, SEARCH_TIMEOUT_MS);
-  });
-
   try {
-    const result = await Promise.race([
-      stitchRoute(params),
-      timeoutPromise,
-    ]);
-
-    clearTimeout(timeoutHandle);
+    const result = await stitchRoute(params);
 
     // ── 3. Return success ──────────────────────────────────────────────────
     return res.json(successResponse(result));
 
   } catch (err) {
-    clearTimeout(timeoutHandle);
+    console.error(`[search] ERROR for ${params.from}→${params.to}:`, err.message);
 
-    const isTimeout = err.message?.includes("timeout");
-
-    console.error(`[search] ${isTimeout ? "TIMEOUT" : "ERROR"} for ${params.from}→${params.to}:`, err.message);
-
-    if (isTimeout) {
-      return res.status(504).json(
-        errorResponse(
-          "Search timed out. The route data sources are taking too long. Please try again.",
-          "search-timeout"
-        )
-      );
-    }
-
-    // Pass unexpected errors to global handler
-    next(err);
+    // Return the actual error message to the frontend so the user knows what went wrong
+    return res.status(500).json(
+      errorResponse(
+        err.message || "An unexpected error occurred during the search.",
+        "search-error"
+      )
+    );
   }
 });
 

@@ -107,6 +107,7 @@ export async function buildSubgraph({ fromCode, toCode, date, candidates, onLog,
   const toCity   = toInfo?.city ?? null;
 
   // ── Direct routes (always fetched) ───────────────────────────────────────
+  if (onLog) onLog(`Checking direct route ${fromCity || fromCode} → ${toCity || toCode}…`);
   const directFetch = fetchRoutePair(fromCode, toCode, date, fromInfo, toInfo, scrapeModes).then(res => {
     if (onLog) onLog(`Scraped direct route ${fromCity || fromCode} → ${toCity || toCode}: ${res.trains.length} trains, ${res.buses.length} buses`);
     return res;
@@ -127,6 +128,8 @@ export async function buildSubgraph({ fromCode, toCode, date, candidates, onLog,
       // No station code → we can't query erail for this city; skip train leg
       // Bus-only candidates are supported if we have bus IDs
       if (viaInfo.busId && fromInfo?.busId && toInfo?.busId) {
+        if (onLog) onLog(`Checking ${fromCity || fromCode} → ${candidate.name}…`);
+        if (onLog) onLog(`Checking ${candidate.name} → ${toCity || toCode}…`);
         legTasks.push({
           via,
           viaCity: candidate.name,
@@ -144,6 +147,8 @@ export async function buildSubgraph({ fromCode, toCode, date, candidates, onLog,
       continue;
     }
 
+    if (onLog) onLog(`Checking ${fromCity || fromCode} → ${candidate.name}…`);
+    if (onLog) onLog(`Checking ${candidate.name} → ${toCity || toCode}…`);
     legTasks.push({
       via,
       viaCity: candidate.name,

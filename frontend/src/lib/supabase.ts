@@ -12,6 +12,10 @@ export async function saveSearchQuery(searchData: {
   mode: string;
   travellers: string;
 }) {
+  if (supabaseUrl.includes('placeholder.supabase.co')) {
+    return;
+  }
+
   try {
     const { error } = await supabase
       .from('searches')

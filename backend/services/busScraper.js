@@ -72,8 +72,9 @@ export async function scrapeIrctcBuses(originBusId, destBusId, date, originName 
 
       console.log(`[busScraper] Navigating to: ${url}`);
 
+      let apiResponded = false;
+
       // Step 4: Intercept network responses for the bus data
-      // (This logic is UNCHANGED from the original working version)
       page.on("response", async (response) => {
         const req = response.request();
         if (req.resourceType() === "fetch" || req.resourceType() === "xhr") {
@@ -82,6 +83,9 @@ export async function scrapeIrctcBuses(originBusId, destBusId, date, originName 
             if (contentType.includes("application/json")) {
               const body = await response.json();
               if (body && typeof body === "object" && Array.isArray(body.data)) {
+                // If we get an array in `data`, the search API has responded
+                apiResponded = true;
+                
                 const busList = body.data;
                 if (busList.length > 0 && busList[0].travelerAgentName) {
                   console.log(
@@ -106,7 +110,8 @@ export async function scrapeIrctcBuses(originBusId, destBusId, date, originName 
       // Step 6: Wait up to 25s for bus API to respond
       // (Increased from 15s because IRCTC occasionally takes ~20s under load)
       for (let i = 0; i < 25; i++) {
-        if (extractedData.length > 0) break;
+        // Break early if we intercepted the API response (even if it's empty)
+        if (apiResponded || extractedData.length > 0) break;
         await delay(1000);
       }
 

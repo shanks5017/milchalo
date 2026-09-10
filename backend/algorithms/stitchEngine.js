@@ -466,18 +466,29 @@ export async function stitchRoute({
     // Sort by composite score descending
     compositeScored.sort((a, b) => b.compositeScore - a.compositeScore);
 
-    // Emit up to 20 unique stitched itineraries (unique by service fingerprint)
-    const MAX_STITCHED = 20;
+    // Ensure diversity by taking up to 25 top routes PER transit hub
+    const MAX_PER_HUB = 25;
+    const hubCounts = new Map();
     const seenHashes = new Set();
+    
     for (const it of compositeScored) {
-      if (stitchedResults.length >= MAX_STITCHED) break;
+      // Find which hubs this route uses (usually just 1 for 2-leg routes)
+      const hubs = it.viaCities || [];
+      const hubKey = hubs.join('|') || 'direct';
+      
+      const currentCount = hubCounts.get(hubKey) || 0;
+      if (currentCount >= MAX_PER_HUB) continue;
+      
       // Fingerprint by via-cities + first leg departure so same-train different-interchanges both show
       const hash = [
-        it.viaCities ? it.viaCities.join('|') : '',
+        hubKey,
         it.legs.map((l) => `${l.mode}:${l.trainNo || l.operator}:${l.departure}`).join('|'),
       ].join('##');
+      
       if (!seenHashes.has(hash)) {
         seenHashes.add(hash);
+        hubCounts.set(hubKey, currentCount + 1);
+        
         // Label by which axis it excels in
         const axisScores = [['fastest', it.score.fastest], ['cheapest', it.score.cheapest], ['reliable', it.score.reliable]];
         const topAxis = axisScores.sort((a, b) => b[1] - a[1])[0][0];

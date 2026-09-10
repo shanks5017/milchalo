@@ -214,7 +214,17 @@ export function findInterchangeCandidates(fromCode, toCode, options = {}) {
     return b.proximityScore - a.proximityScore;               // proximity last
   });
 
+  // Deduplicate by name before slicing
+  const uniqueCandidates = [];
+  const seenNames = new Set();
+  for (const c of candidates) {
+    if (!seenNames.has(c.name)) {
+      seenNames.add(c.name);
+      uniqueCandidates.push(c);
+    }
+  }
+
   // Build final result — forced city always first if present
-  const top = candidates.slice(0, maxCandidates);
+  const top = uniqueCandidates.slice(0, maxCandidates);
   return forced ? [forced, ...top.filter((c) => c.name !== forced.name)] : top;
 }

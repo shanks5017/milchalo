@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Train, Bus, Plane, Car, ArrowRight, ArrowLeftRight, Calendar, User, ShieldCheck, Map, Headset, MapPin } from 'lucide-react';
+import { Plane, Car, ArrowRight, ArrowLeftRight, Calendar, User, ShieldCheck, Map, Headset, MapPin } from 'lucide-react';
+import { CustomTrain as Train, CustomBus as Bus } from './CustomIcons';
 import { useNavigate } from 'react-router-dom';
 import { saveSearchQuery } from '../lib/supabase';
 
@@ -21,7 +22,7 @@ export default function SearchBox({ activeMode, onSearchStart, onSearchResults }
   const [fromCode, setFromCode] = useState('SBC');
   const [toCode, setToCode] = useState('BGM');
   const [depart, setDepart] = useState('');
-  const [travellers, setTravellers] = useState('2 Adults');
+  const [bufferTime, setBufferTime] = useState('120');
   const navigate = useNavigate();
 
   const [locations, setLocations] = useState<Location[]>([]);
@@ -76,37 +77,25 @@ export default function SearchBox({ activeMode, onSearchStart, onSearchResults }
       destination: to,
       date: depart,
       mode: activeMode,
-      travellers,
+      travellers: '1',
     });
 
     // Formatting date as expected by backend (dd-mm-yyyy)
     const [yyyy, mm, dd] = depart.split('-');
     const formattedDate = `${dd}-${mm}-${yyyy}`;
 
-    const payload = {
+    const params = new URLSearchParams({
       from: fromCode,
       to: toCode,
+      fromName: from,
+      toName: to,
       date: formattedDate,
       mode: activeMode,
-      maxLegs: activeMode === 'stitched' ? 3 : 1,
-      sessionId: Math.random().toString(36).substring(7)
-    };
-    
-    console.log('Sending search request to backend:', payload);
-    if (onSearchStart) onSearchStart();
-    try {
-      const res = await fetch('http://localhost:3002/api/search', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json();
-      console.log('Search Results:', data);
-      if (onSearchResults) onSearchResults(data);
-    } catch (err) {
-      console.error('Search request failed', err);
-      if (onSearchResults) onSearchResults({ success: false, error: 'Failed to connect to backend' });
-    }
+      bufferTime
+    });
+
+    console.log('Navigating to search page:', params.toString());
+    navigate(`/search?${params.toString()}`);
   };
 
   const getFilteredLocations = (query: string) => {
@@ -125,7 +114,7 @@ export default function SearchBox({ activeMode, onSearchStart, onSearchResults }
       <div className="flex border-b border-gray-100 p-2 gap-2 overflow-x-auto">
         <button
           onClick={() => navigate('/stitched')}
-          className={`whitespace-nowrap flex items-center space-x-2 px-6 py-3 rounded-xl font-medium text-sm transition-colors ${
+          className={`whitespace-nowrap flex items-center space-x-2 px-6 py-3 rounded-full font-normal text-sm transition-colors ${
             activeMode === 'stitched' ? 'bg-[#006039] text-white' : 'text-gray-600 hover:bg-gray-50'
           }`}
         >
@@ -134,7 +123,7 @@ export default function SearchBox({ activeMode, onSearchStart, onSearchResults }
         </button>
         <button
           onClick={() => navigate('/train')}
-          className={`whitespace-nowrap flex items-center space-x-2 px-6 py-3 rounded-xl font-medium text-sm transition-colors ${
+          className={`whitespace-nowrap flex items-center space-x-2 px-6 py-3 rounded-full font-normal text-sm transition-colors ${
             activeMode === 'train' ? 'bg-[#006039] text-white' : 'text-gray-600 hover:bg-gray-50'
           }`}
         >
@@ -143,7 +132,7 @@ export default function SearchBox({ activeMode, onSearchStart, onSearchResults }
         </button>
         <button
           onClick={() => navigate('/bus')}
-          className={`whitespace-nowrap flex items-center space-x-2 px-6 py-3 rounded-xl font-medium text-sm transition-colors ${
+          className={`whitespace-nowrap flex items-center space-x-2 px-6 py-3 rounded-full font-normal text-sm transition-colors ${
             activeMode === 'bus' ? 'bg-[#006039] text-white' : 'text-gray-600 hover:bg-gray-50'
           }`}
         >
@@ -152,7 +141,7 @@ export default function SearchBox({ activeMode, onSearchStart, onSearchResults }
         </button>
         <button
           onClick={() => navigate('/flight')}
-          className={`whitespace-nowrap flex items-center space-x-2 px-6 py-3 rounded-xl font-medium text-sm transition-colors ${
+          className={`whitespace-nowrap flex items-center space-x-2 px-6 py-3 rounded-full font-normal text-sm transition-colors ${
             activeMode === 'flight' ? 'bg-[#006039] text-white' : 'text-gray-600 hover:bg-gray-50'
           }`}
         >
@@ -161,7 +150,7 @@ export default function SearchBox({ activeMode, onSearchStart, onSearchResults }
         </button>
         <button
           onClick={() => navigate('/cab')}
-          className={`whitespace-nowrap flex items-center space-x-2 px-6 py-3 rounded-xl font-medium text-sm transition-colors ${
+          className={`whitespace-nowrap flex items-center space-x-2 px-6 py-3 rounded-full font-normal text-sm transition-colors ${
             activeMode === 'cab' ? 'bg-[#006039] text-white' : 'text-gray-600 hover:bg-gray-50'
           }`}
         >
@@ -174,7 +163,7 @@ export default function SearchBox({ activeMode, onSearchStart, onSearchResults }
       <form onSubmit={handleSearch} className="p-4 md:p-6">
         <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-center gap-4 relative mb-6">
           <div className="flex flex-col relative" ref={fromRef}>
-             <span className="text-gray-500 text-sm font-medium mb-1">From</span>
+             <span className="text-gray-500 text-sm font-normal mb-1">From</span>
              <div className="relative">
                <input 
                  type="text" 
@@ -184,7 +173,7 @@ export default function SearchBox({ activeMode, onSearchStart, onSearchResults }
                    setFromDropdown(true);
                  }}
                  onFocus={() => setFromDropdown(true)}
-                 className="w-full text-xl md:text-3xl font-bold text-gray-900 border-none outline-none focus:ring-0 p-0 bg-transparent" 
+                 className="w-full h-12 text-xl md:text-3xl font-light text-gray-900 border-none outline-none focus:ring-0 py-1 bg-transparent leading-normal" 
                  placeholder="Origin Hub"
                />
                <span className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400 text-xs font-semibold bg-gray-100 px-2 py-1 rounded">{fromCode}</span>
@@ -219,7 +208,7 @@ export default function SearchBox({ activeMode, onSearchStart, onSearchResults }
           </button>
 
           <div className="flex flex-col relative" ref={toRef}>
-             <span className="text-gray-500 text-sm font-medium mb-1">To</span>
+             <span className="text-gray-500 text-sm font-normal mb-1">To</span>
              <div className="relative">
                <input 
                  type="text" 
@@ -229,7 +218,7 @@ export default function SearchBox({ activeMode, onSearchStart, onSearchResults }
                    setToDropdown(true);
                  }}
                  onFocus={() => setToDropdown(true)}
-                 className="w-full text-xl md:text-3xl font-bold text-gray-900 border-none outline-none focus:ring-0 p-0 bg-transparent" 
+                 className="w-full h-12 text-xl md:text-3xl font-light text-gray-900 border-none outline-none focus:ring-0 py-1 bg-transparent leading-normal" 
                  placeholder="Destination Hub"
                />
                <span className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400 text-xs font-semibold bg-gray-100 px-2 py-1 rounded">{toCode}</span>
@@ -262,35 +251,27 @@ export default function SearchBox({ activeMode, onSearchStart, onSearchResults }
 
         <div className="w-full h-px bg-gray-100 mb-6"></div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-6 items-end mt-2">
           <div className="flex flex-col">
-             <span className="text-gray-500 text-sm font-medium mb-1">Depart</span>
-             <div className="flex items-center space-x-2 text-gray-900 font-semibold text-lg cursor-pointer">
+             <span className="text-gray-500 text-sm font-normal mb-1">Depart</span>
+             <div className="flex items-center space-x-2 text-gray-900 font-normal text-lg cursor-pointer">
                <Calendar className="w-5 h-5 text-gray-500" />
-               <input type="date" value={depart} onChange={(e) => setDepart(e.target.value)} className="border-none outline-none font-semibold p-0 text-gray-900 cursor-pointer bg-transparent" />
+               <input type="date" value={depart} onChange={(e) => setDepart(e.target.value)} className="border-none outline-none font-normal p-0 text-gray-900 cursor-pointer bg-transparent" />
              </div>
           </div>
           <div className="flex flex-col">
-             <span className="text-gray-500 text-sm font-medium mb-1">Return (Optional)</span>
-             <div className="flex items-center space-x-2 text-gray-400 font-semibold text-lg cursor-pointer">
-               <Calendar className="w-5 h-5 text-gray-300" />
-               <span>Add return</span>
+             <span className="text-gray-500 text-sm font-normal mb-1">Buffer Time (mins)</span>
+             <div className="flex items-center space-x-2 text-gray-900 font-normal text-lg cursor-pointer border-b border-gray-200 pb-1">
+               <input type="number" min="0" step="5" value={bufferTime} onChange={(e) => setBufferTime(e.target.value)} className="border-none outline-none font-normal p-0 text-gray-900 bg-transparent w-12 text-center" />
+               <span className="text-gray-400 text-sm">minutes</span>
              </div>
           </div>
-          <div className="flex flex-col">
-             <span className="text-gray-500 text-sm font-medium mb-1">Travellers</span>
-             <div className="flex items-center space-x-2 text-gray-900 font-semibold text-lg cursor-pointer">
-               <User className="w-5 h-5 text-gray-500" />
-               <input type="text" value={travellers} onChange={(e) => setTravellers(e.target.value)} className="border-none outline-none font-semibold p-0 text-gray-900 bg-transparent w-full" />
-             </div>
+          <div className="flex justify-end mt-4 md:mt-0">
+            <button type="submit" className="bg-[#006039] hover:bg-[#004b2c] text-white px-8 py-4 rounded-full font-normal text-lg flex items-center space-x-2 transition-colors shadow-lg shadow-green-900/20">
+              <span>Search journeys</span>
+              <ArrowRight className="w-5 h-5" />
+            </button>
           </div>
-        </div>
-
-        <div className="mt-6 flex justify-end">
-          <button type="submit" className="bg-[#006039] hover:bg-[#004b2c] text-white px-8 py-4 rounded-xl font-semibold text-lg flex items-center space-x-2 transition-colors shadow-lg shadow-green-900/20">
-            <span>Search journeys</span>
-            <ArrowRight className="w-5 h-5" />
-          </button>
         </div>
       </form>
     </div>

@@ -1,10 +1,20 @@
 /* ==========================================================================
    ROUTESTITCH DESIGN SYSTEM & COMPONENT ARCHITECTURE
    Theme: Razor-Sharp Modern Tech (Single Font, Emerald Accent, Crisp Geometry)
-   Font: Plus Jakarta Sans exclusively
+   Font: Raleway and Oswald
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+.font-oswald {
+  font-family: "Oswald", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+.font-raleway {
+  font-family: "Raleway", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
 
 /* --------------------------------------------------------------------------
    1. DESIGN SYSTEM & CSS VARIABLES
@@ -28,8 +38,8 @@
   --color-accent-light: #EEF7F2;
   --color-accent-border: #BCE3D0;
 
-  /* Typography - Single Font Family */
-  --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Typography - Unified Font Family */
+  --font-main: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   /* Fluid Typography Scale */
   --text-3xs: 0.6875rem;

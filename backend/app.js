@@ -76,8 +76,12 @@ app.use((err, _req, res, _next) => {
 
 // ── Start ─────────────────────────────────────────────────────────────────────
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`[RouteStitch Core API] Listening on port ${PORT}`);
   console.log(`  Health  : GET  http://localhost:${PORT}/health`);
   console.log(`  Search  : POST http://localhost:${PORT}/api/search`);
 });
+
+// Disable server timeout entirely for long-running scraping tasks
+server.setTimeout(0);
+server.keepAliveTimeout = 0;

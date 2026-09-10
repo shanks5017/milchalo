@@ -6,6 +6,8 @@ Existing Indian travel platforms (RedBus, IRCTC, MakeMyTrip) solve single-mode s
 
 RouteStitch solves this by automatically computing multi-leg journeys (train+bus, bus+bus, bus+train, any combination) with realistic, tier-aware buffer times between legs.
 
+
+
 ## 2. Target User
 
 A traveler in a tier-2/tier-3 Indian city making an inter-city trip with no direct transport option (or wanting to compare direct vs. faster/cheaper multi-leg alternatives).

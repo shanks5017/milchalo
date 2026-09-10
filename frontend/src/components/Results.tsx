@@ -1,5 +1,6 @@
-import React from 'react';
-import { Train, Bus, Clock } from 'lucide-react';
+import React, { useState } from 'react';
+import { Clock } from 'lucide-react';
+import { CustomTrain as Train, CustomBus as Bus } from './CustomIcons';
 
 export default function Results({ isLoading, data }: { isLoading: boolean, data: any }) {
   if (isLoading) {
@@ -19,6 +20,22 @@ export default function Results({ isLoading, data }: { isLoading: boolean, data:
   const directRoutes = data.data?.direct || [];
   const stitchedRoutes = data.data?.stitched || [];
   const allRoutes = [...stitchedRoutes, ...directRoutes];
+  
+  const [selectedVia, setSelectedVia] = useState<string | null>(null);
+
+  const viaCities = Array.from(
+    new Set(
+      stitchedRoutes
+        .filter((r: any) => r.viaCities && r.viaCities.length > 0)
+        .flatMap((r: any) => r.viaCities)
+    )
+  ) as string[];
+
+  const filteredRoutes = allRoutes.filter((route: any) => {
+    if (!selectedVia) return true;
+    if (route.viaCities && route.viaCities.includes(selectedVia)) return true;
+    return false;
+  });
 
   if (allRoutes.length === 0) {
     return (
@@ -37,9 +54,40 @@ export default function Results({ isLoading, data }: { isLoading: boolean, data:
 
   return (
     <div className="max-w-4xl mx-auto py-12 px-8 relative z-20 bg-white">
-      <h2 className="text-2xl font-bold mb-8 text-gray-900">{allRoutes.length} Optimal Routes Found</h2>
+      <div className="flex flex-col mb-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">{filteredRoutes.length} Optimal Routes Found</h2>
+        
+        {viaCities.length > 0 && (
+          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+            <button 
+              onClick={() => setSelectedVia(null)}
+              className={`px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+                !selectedVia 
+                  ? 'bg-[#006039] text-white shadow-md' 
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              All Routes
+            </button>
+            {viaCities.map(city => (
+              <button 
+                key={city}
+                onClick={() => setSelectedVia(city)}
+                className={`px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+                  selectedVia === city 
+                    ? 'bg-[#006039] text-white shadow-md' 
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                Via {city}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
       <div className="space-y-6">
-        {allRoutes.map((route, idx) => {
+        {filteredRoutes.map((route, idx) => {
           const isDirect = route.legs ? route.legs.length === 1 : true;
           const price = route.totalCostMin || route.lowestFare || 0;
           const legs = route.legs || [route];
